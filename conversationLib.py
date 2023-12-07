@@ -8,10 +8,10 @@ with open("config.json","r") as f:
     config = json.load(f)
 
 class conversation:
-    messages = []
-    id = 0
 
     def __init__(self,messages = [], id=-1):
+        self.messages = []
+        self.id = 0
         if messages == []:
             messages.append(messagesLib.basePrompt())
         self.messages = messages
