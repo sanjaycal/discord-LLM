@@ -12,7 +12,10 @@ class conversation:
     id = 0
 
     def __init__(self,messages = [], id=-1):
+        if messages == []:
+            messages.append(messagesLib.basePrompt())
         self.messages = messages
+        self.id = id
         if id == -1:
             self.id = random.randint(0,1000000000000000000000000000000000000000)
     
@@ -26,14 +29,22 @@ class conversation:
         saveString = ""
         for message in self.messages:
             saveString += str(message) + config["separation-character"]
-        fp.write(saveString[:-len(config["separation-character"])])
+        fp.write("conversations" + saveString[:-len(config["separation-character"])])
     
     def generateAIResponse(self):
         self.messages.append(AIWrapper.generateText(str(self)))
         with open(str(self.id),"w") as f:
             self.saveToFile(f)
         return self.messages[-1].content
+    
+    def setSystemMessage(self,content):
+        if len(self.messages)==0:
+            self.messages.append(messagesLib.systemMessage(content))
+        else:
+            self.messages[0] = messagesLib.systemMessage(content)
 
+    def setHumanResponse(self,content,user="User"):
+        self.messages.append(messagesLib.humanMessage(content,user))
 
 def readConversationFromFile(fp):
     fileText = fp.read()

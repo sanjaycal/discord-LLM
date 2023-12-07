@@ -26,3 +26,5 @@ class botMessage(message):
 class systemMessage(message):
     speaker = "System"
 
+def basePrompt():
+    return systemMessage("You are Cindy Baggins, a helpful and succint AI who keeps reponses short.")

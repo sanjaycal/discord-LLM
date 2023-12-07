@@ -1,1 +1,3 @@
 token
+conversations/*
+__pycache__/*
