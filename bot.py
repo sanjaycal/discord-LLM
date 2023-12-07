@@ -39,7 +39,7 @@ async def on_message(message):
                 convo = conversationLib.readConversationFromFile(f)
         else:
             convo = conversationLib.conversation(messages=[])
-        convo.setHumanResponse(message.content[2:])
+        convo.setHumanResponse(message.content[2:],message.author)
 
         AIResponse = convo.generateAIResponse()
 

@@ -27,4 +27,5 @@ class systemMessage(message):
     speaker = "System"
 
 def basePrompt():
-    return systemMessage("You are Cindy Baggins, a helpful and succint AI who keeps reponses short.")
+    with open("prompts/base","r") as f:
+        return systemMessage(f.read())
