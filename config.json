@@ -1,0 +1,5 @@
+{
+    "model":"neural-chat",
+    "separation-character":"➆",
+    "sub-message-separation-character":"➐"
+}
