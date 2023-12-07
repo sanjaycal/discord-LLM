@@ -11,7 +11,7 @@ class message:
         self.content = message
     
     def __str__(self):
-        return f"### {self.speaker}:\n{self.content}\n\n"
+        return f"### {self.speaker}:\n{self.content}\n"
 
 
 class humanMessage(message):

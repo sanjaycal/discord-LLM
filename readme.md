@@ -1,0 +1,1 @@
+This is the repo dedicated to a discord LLM that I am working on.
