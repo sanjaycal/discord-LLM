@@ -3,6 +3,7 @@ import random
 
 import messagesLib
 import AIWrapper
+import internetScraperLib
 
 with open("config.json","r") as f:
     config = json.load(f)
@@ -30,11 +31,15 @@ class conversation:
         for message in self.messages:
             saveString += str(message) + config["separation-character"]
         fp.write(saveString[:-len(config["separation-character"])])
-    
+
     def generateAIResponse(self):
         self.messages.append(AIWrapper.generateText(str(self)))
         with open("conversations/" + str(self.id),"w") as f:
             self.saveToFile(f)
+        aiOutput = self.messages[-1].content
+        if ";;;" in aiOutput[:4]:
+            self.messages.append(messagesLib.internetMessage(internetScraperLib.get_text(aiOutput.split(";;;")[-1].split("\n")[0])))
+            aiOutput = self.generateAIResponse()
         return self.messages[-1].content
     
     def setSystemMessage(self,content):

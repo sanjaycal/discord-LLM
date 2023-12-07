@@ -21,10 +21,16 @@ class humanMessage(message):
 
 
 class botMessage(message):
-    speaker = "Assistant"
+    speaker = "Cindy Baggins"
 
 class systemMessage(message):
     speaker = "System"
+
+class internetMessage(message):
+    speaker = "Bill Wang"
+
+class networkMessage(message):
+    speaker = "Network"
 
 def basePrompt():
     with open("prompts/base","r") as f:
