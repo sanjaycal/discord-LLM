@@ -11,7 +11,7 @@ async def reply(message,text,convoID):
     else:
         tmp = to_send[-1][1000:]
         to_send[-1] = to_send[-1][:1000]
-        to_send.append(tmp + f"[{convoID}]")
+        to_send.append(tmp + " " + f"[{convoID}]")
     for m in to_send:
         await message.reply(m)
 

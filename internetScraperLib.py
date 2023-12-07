@@ -3,7 +3,10 @@ from bs4 import BeautifulSoup
 
 
 def get_text(url):
-    r = requests.get(url)
+    try:
+        r = requests.get(url)
+    except:
+        return "Invalid URL"
     if r.status_code!=200:
         return f"status code:{r.status_code}"
 

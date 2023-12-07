@@ -1,5 +1,6 @@
 import json
 import random
+import copy
 
 import messagesLib
 import AIWrapper
@@ -26,22 +27,6 @@ class conversation:
             saveString += str(message)
         return saveString
     
-    def saveToFile(self,fp):
-        saveString = ""
-        for message in self.messages:
-            saveString += str(message) + config["separation-character"]
-        fp.write(saveString[:-len(config["separation-character"])])
-
-    def generateAIResponse(self):
-        self.messages.append(AIWrapper.generateText(str(self)))
-        with open("conversations/" + str(self.id),"w") as f:
-            self.saveToFile(f)
-        aiOutput = self.messages[-1].content
-        if ";;;" in aiOutput[:4]:
-            self.messages.append(messagesLib.internetMessage(internetScraperLib.get_text(aiOutput.split(";;;")[-1].split("\n")[0])))
-            aiOutput = self.generateAIResponse()
-        return self.messages[-1].content
-    
     def setSystemMessage(self,content):
         if len(self.messages)==0:
             self.messages.append(messagesLib.systemMessage(content))
@@ -50,6 +35,31 @@ class conversation:
 
     def setHumanResponse(self,content,user="User"):
         self.messages.append(messagesLib.humanMessage(content,user))
+    
+    def saveToFile(self,fp):
+        saveString = ""
+        for message in self.messages:
+            saveString += str(message) + config["separation-character"]
+        fp.write(saveString[:-len(config["separation-character"])])
+    
+    def getBillResponse(self, url):
+        billmessages = [x for x in self.messages]
+        billmessages[0] = messagesLib.networkPrompt()
+        billmessages.append(messagesLib.networkMessage(internetScraperLib.get_text(url)))
+        billConvo = conversation(messages=billmessages)
+        out = billConvo.generateAIResponse()
+        self.messages.append(messagesLib.webScraperMessage(out))
+        
+
+    def generateAIResponse(self):
+        self.messages.append(AIWrapper.generateText(str(self)))
+        with open("conversations/" + str(self.id),"w") as f:
+            self.saveToFile(f)
+        aiOutput = self.messages[-1].content
+        if ";;;" in aiOutput[:4]:
+            self.getBillResponse(aiOutput.split(";;;")[-1].split("\n")[0])
+            aiOutput = self.generateAIResponse()
+        return self.messages[-1].content
 
 def readConversationFromFile(fp):
     fileText = fp.read()

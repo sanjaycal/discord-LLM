@@ -26,7 +26,7 @@ class botMessage(message):
 class systemMessage(message):
     speaker = "System"
 
-class internetMessage(message):
+class webScraperMessage(message):
     speaker = "Bill Wang"
 
 class networkMessage(message):
@@ -34,4 +34,8 @@ class networkMessage(message):
 
 def basePrompt():
     with open("prompts/base","r") as f:
+        return systemMessage(f.read())
+
+def networkPrompt():
+    with open("prompts/networkScraper","r") as f:
         return systemMessage(f.read())
