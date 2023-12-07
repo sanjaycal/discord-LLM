@@ -21,7 +21,7 @@ async def on_message(message):
     if message.content[:2] == "??":
         if message.reference != None:
             convoID = (await message.channel.fetch_message(message.reference.message_id)).content.split("[")[-1][:-1]
-            with open(convoID,"r") as f:
+            with open("conversations/" + convoID,"r") as f:
                 convo = conversationLib.readConversationFromFile(f)
         else:
             convo = conversationLib.conversation()

@@ -29,11 +29,11 @@ class conversation:
         saveString = ""
         for message in self.messages:
             saveString += str(message) + config["separation-character"]
-        fp.write("conversations" + saveString[:-len(config["separation-character"])])
+        fp.write(saveString[:-len(config["separation-character"])])
     
     def generateAIResponse(self):
         self.messages.append(AIWrapper.generateText(str(self)))
-        with open(str(self.id),"w") as f:
+        with open("conversations/" + str(self.id),"w") as f:
             self.saveToFile(f)
         return self.messages[-1].content
     
@@ -63,23 +63,6 @@ def readConversationFromFile(fp):
             messages.append(messagesLib.botMessage(messageContent))
         else:
             messages.append(messagesLib.humanMessage(messageContent,speaker))
-    out = conversation(messages,id = int(fp.name))
+    out = conversation(messages,id = int(fp.name.split("conversations/")[-1]))
     return out
         
-
-
-
-convo = conversation()
-
-convo.messages.append(messagesLib.systemMessage("You are Cindy Baggins, be nice"))
-
-convo.messages.append(messagesLib.humanMessage("How Are You"))
-
-with open(str(convo.id),"w") as f:
-    convo.saveToFile(f)
-
-with open(str(convo.id),"r") as f:
-    convo2 = readConversationFromFile(f)
-
-
-print(convo2.generateAIResponse())
