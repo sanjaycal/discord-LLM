@@ -6,7 +6,7 @@ import conversationLib
 async def reply(message,text,convoID):
     n = 2000
     to_send = [text[i:i+n] for i in range(0, len(text), n)]
-    if len(to_send[-1])<1500:
+    if len(to_send[-1])<1400:
         to_send[-1]+=f"[{convoID}]"
     else:
         tmp = to_send[-1][1000:]
