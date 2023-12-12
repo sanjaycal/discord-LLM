@@ -27,10 +27,13 @@ class systemMessage(message):
     speaker = "System"
 
 class webScraperMessage(message):
-    speaker = "Bill Wang"
+    speaker = "Function Runner"
 
 class networkMessage(message):
     speaker = "Network"
+
+class requestMessage(message):
+    speaker = "Request"
 
 def basePrompt():
     with open("prompts/base","r") as f:

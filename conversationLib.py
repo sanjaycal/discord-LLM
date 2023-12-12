@@ -42,10 +42,10 @@ class conversation:
             saveString += str(message) + config["separation-character"]
         fp.write(saveString[:-len(config["separation-character"])])
     
-    def getBillResponse(self, url):
-        billmessages = [x for x in self.messages]
-        billmessages[0] = messagesLib.networkPrompt()
-        billmessages.append(messagesLib.networkMessage(internetScraperLib.get_text(url)))
+    def getBillResponse(self, search_term):
+        billmessages = []
+        billmessages.append(messagesLib.networkPrompt())
+        billmessages.append(messagesLib.requestMessage(search_term))
         billConvo = conversation(messages=billmessages)
         out = billConvo.generateAIResponse()
         self.messages.append(messagesLib.webScraperMessage(out))
@@ -56,9 +56,25 @@ class conversation:
         with open("conversations/" + str(self.id),"w") as f:
             self.saveToFile(f)
         aiOutput = self.messages[-1].content
-        if ";;;" in aiOutput[:4]:
-            self.getBillResponse(aiOutput.split(";;;")[-1].split("\n")[0])
+        while aiOutput[0] == " ":
+            aiOutput = aiOutput[1:]
+        if "<" in aiOutput and "</" in aiOutput and ">" in aiOutput:
+            print(aiOutput)
+            functionToCall = json.loads(aiOutput.split(">")[1].split("</")[0])
+            functionToCall["name"] = aiOutput.split(">")[0].split("<")[-1]
+            match functionToCall["name"]:
+                case "websearch":
+                    self.getBillResponse(functionToCall["arguments"]["searchQuery"])
+                case "googlesearch":
+                    self.messages.append(messagesLib.networkMessage(str(internetScraperLib.google_search(functionToCall["arguments"]["searchQuery"],num=5))))
+                case "crawlWebPage":
+                    try:
+                        self.messages.append(messagesLib.networkMessage(internetScraperLib.get_text(functionToCall["arguments"]["URL"])))
+                    except:
+                        self.messages.append(messagesLib.networkMessage(internetScraperLib.get_text(functionToCall["URL"])))
             aiOutput = self.generateAIResponse()
+            while aiOutput[0] == " ":
+                aiOutput = aiOutput[1:]
         return self.messages[-1].content
 
 def readConversationFromFile(fp):
