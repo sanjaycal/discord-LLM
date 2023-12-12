@@ -27,3 +27,19 @@ def get_text(url):
     text = '\n'.join(chunk for chunk in chunks if chunk)
 
     return text
+
+from googleapiclient.discovery import build
+
+api_key = open("googleSearchAPIKey","r").read()
+cse_id = open("googleSearchCSEID","r").read()
+
+def google_search(search_term, **kwargs):
+    global api_key
+    global cse_id
+    service = build("customsearch", "v1", developerKey=api_key)
+    res = service.cse().list(q=search_term, cx=cse_id, **kwargs).execute()
+    out = []
+    gs = res['items']
+    for i in gs:
+        out.append({"link":i["link"],"snippet":i["snippet"]})
+    return out
