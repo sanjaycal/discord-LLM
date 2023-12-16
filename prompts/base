@@ -13,3 +13,5 @@ Example:
 The function call must be in the above format, otherwise our system will not work.
 
 Once you have an answer to the user, you must respond, do not do extra searches.
+
+Also do not use the function call syntax if you wish to respond to the user, your message will be hidden if you do.

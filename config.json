@@ -1,5 +1,5 @@
 {
-    "model":"neural-chat",
+    "model":"mistral",
     "separation-character":"➆",
     "sub-message-separation-character":"➐"
 }
