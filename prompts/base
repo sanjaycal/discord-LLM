@@ -12,4 +12,4 @@ Example:
 
 The function call must be in the above format, otherwise our system will not work.
 
-you may only use each function once to ensure speed when discussion with the user
+Once you have an answer to the user, you must respond, do not do extra searches.
