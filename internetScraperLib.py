@@ -41,5 +41,6 @@ def google_search(search_term, **kwargs):
     out = []
     gs = res['items']
     for i in gs:
-        out.append({"link":i["link"],"snippet":i["snippet"]})
+        #out.append({"link":i["link"],"snippet":i["snippet"]})
+        out.append({"link":i["link"]})
     return out
